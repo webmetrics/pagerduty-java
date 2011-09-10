@@ -50,6 +50,8 @@ You can also wire up the PagerDutyClient using dependency injection frameworks s
  - @Named("pagerduty.username")
  - @Named("pagerduty.password")
 
+Note: The client *always uses SSL* to make it's HTTP requests and until we hear a good reason we won't be offering an option to change this.
+
 License
 -------
 
