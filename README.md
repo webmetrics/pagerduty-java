@@ -12,11 +12,13 @@ Downloading
 
 The easiest way to get started is to just add this dependency in to your Maven build:
 
-    <dependency>
-        <groupId>biz.neustar</groupId>
-        <artifactId>pagerduty</artifactId>
-        <version>1.0-beta-1</version>
-    </dependency>
+```xml
+<dependency>
+    <groupId>biz.neustar</groupId>
+    <artifactId>pagerduty</artifactId>
+    <version>1.0-beta-1</version>
+</dependency>
+```
 
 If you don't use Maven, you can still find the jars in the central Maven repository. You'll also need the following dependencies:
 
@@ -29,20 +31,22 @@ Using
 
 The API is pretty straight forward if you've read the PagerDuty API docs:
 
-    PagerDutyClient client = new PagerDutyClient("subdomain", "username", "password");
+```java
+PagerDutyClient client = new PagerDutyClient("subdomain", "username", "password");
 
-    // list incident counts
-    IncidentsQuery query = new IncidentsQuery().withStatus("resolved").assignedToUser("bob");
-    int count = client.getIncidentsCount(DateUtils.daysAgo(5), DateUtils.now(), query);
+// list incident counts
+IncidentsQuery query = new IncidentsQuery().withStatus("resolved").assignedToUser("bob");
+int count = client.getIncidentsCount(DateUtils.daysAgo(5), DateUtils.now(), query);
 
-    // trigger a new incident
-    Map details = new HashMap();
-    details.put("foo", "bar");
-    EventResponse response = client.trigger("service_key", "optional description", "optional incident key", details);
-    String incidentKey = response.getIncidentKey();
+// trigger a new incident
+Map details = new HashMap();
+details.put("foo", "bar");
+EventResponse response = client.trigger("service_key", "optional description", "optional incident key", details);
+String incidentKey = response.getIncidentKey();
 
-    // resolve the incident
-    response = client.resolve("service_key", "optional description", incidentKey, details);
+// resolve the incident
+response = client.resolve("service_key", "optional description", incidentKey, details);
+```
 
 You can also wire up the PagerDutyClient using dependency injection frameworks such as Guice. The three constructor parameters are bound to the following @Named parameters:
 
