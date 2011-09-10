@@ -3,9 +3,9 @@ PagerDuty Java API
 
 This is a simple Java API that wraps the [PagerDuty](http://www.pagerduty.com/) REST APIs documented here:
 
- - (Integration API)[http://www.pagerduty.com/docs/integration-api/integration-api-documentation]
- - (Incidents Query API)[http://www.pagerduty.com/docs/rest-api/incidents]
- - (Schedules API)[http://www.pagerduty.com/docs/rest-api/schedules] (not yet implemented)
+ - [Integration API[(http://www.pagerduty.com/docs/integration-api/integration-api-documentation)
+ - [Incidents Query API[(http://www.pagerduty.com/docs/rest-api/incidents)
+ - [Schedules API](http://www.pagerduty.com/docs/rest-api/schedules) (not yet implemented)
 
 Downloading
 -----------
