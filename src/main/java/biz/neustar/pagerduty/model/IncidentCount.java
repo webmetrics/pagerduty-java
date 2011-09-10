@@ -1,4 +1,4 @@
-package biz.neustar.pagerduty;
+package biz.neustar.pagerduty.model;
 
 public class IncidentCount {
     private int total;

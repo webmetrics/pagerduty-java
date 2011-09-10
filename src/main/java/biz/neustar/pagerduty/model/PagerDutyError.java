@@ -1,4 +1,4 @@
-package biz.neustar.pagerduty;
+package biz.neustar.pagerduty.model;
 
 import java.util.List;
 

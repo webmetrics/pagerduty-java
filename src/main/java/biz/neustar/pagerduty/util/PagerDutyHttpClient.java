@@ -1,5 +1,6 @@
-package biz.neustar.pagerduty;
+package biz.neustar.pagerduty.util;
 
+import biz.neustar.pagerduty.util.Version;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.AuthState;
@@ -21,6 +22,7 @@ import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpRequestExecutor;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 public class PagerDutyHttpClient extends DefaultHttpClient {
@@ -28,6 +30,7 @@ public class PagerDutyHttpClient extends DefaultHttpClient {
     private AuthScope authScope;
     private UsernamePasswordCredentials creds;
 
+    @Inject
     public PagerDutyHttpClient(@Named("pagerduty.subdomain") String subdomain,
                                @Named("pagerduty.username") String username,
                                @Named("pagerduty.password") String password) {

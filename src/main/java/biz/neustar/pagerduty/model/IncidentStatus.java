@@ -1,4 +1,4 @@
-package biz.neustar.pagerduty;
+package biz.neustar.pagerduty.model;
 
 public enum IncidentStatus {
     TRIGGERED("triggered"), ACKNOWLEDGED("acknowledged"), RESOLVED("resolved");

@@ -1,4 +1,6 @@
-package biz.neustar.pagerduty;
+package biz.neustar.pagerduty.util;
+
+import biz.neustar.pagerduty.Main;
 
 import java.io.IOException;
 import java.io.InputStream;

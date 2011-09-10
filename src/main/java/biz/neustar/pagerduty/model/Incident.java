@@ -1,7 +1,4 @@
-package biz.neustar.pagerduty;
-
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+package biz.neustar.pagerduty.model;
 
 import java.util.Date;
 import java.util.Map;

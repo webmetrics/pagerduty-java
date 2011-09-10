@@ -1,9 +1,11 @@
 package biz.neustar.pagerduty;
 
-public class PagerDutyException extends Exception {
+import biz.neustar.pagerduty.model.PagerDutyError;
+
+public class QueryException extends Exception {
     private PagerDutyError details;
 
-    public PagerDutyException(PagerDutyError details) {
+    public QueryException(PagerDutyError details) {
         super(details.getMessage());
         this.details = details;
     }
