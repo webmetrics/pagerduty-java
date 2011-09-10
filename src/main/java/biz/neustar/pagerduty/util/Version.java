@@ -1,16 +1,14 @@
 package biz.neustar.pagerduty.util;
 
-import biz.neustar.pagerduty.Main;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 public class Version {
-    private static String VERSION = "UNKNOWN/DEVELOPMENT";
+    private static String VERSION = "DEVELOPMENT";
 
     static {
-        InputStream is = Main.class.getResourceAsStream("/META-INF/maven/biz.neustar/pagerduty/pom.properties");
+        InputStream is = Version.class.getResourceAsStream("/META-INF/maven/biz.neustar/pagerduty/pom.properties");
         if (is != null) {
             Properties props = new Properties();
             try {
