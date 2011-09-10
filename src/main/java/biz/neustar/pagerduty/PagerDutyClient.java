@@ -26,7 +26,6 @@ public class PagerDutyClient {
     public PagerDutyClient(@Named("pagerduty.subdomain") String subdomain,
                            @Named("pagerduty.username") String username,
                            @Named("pagerduty.password") String password) {
-        this.mapper = mapper;
         this.client = new PagerDutyHttpClient(subdomain, username, password);
         this.baseUrl = "https://" + subdomain + ".pagerduty.com";
         mapper = makeObjectMapper();
@@ -49,7 +48,6 @@ public class PagerDutyClient {
     public int getIncidentsCount(Date start, Date end, IncidentsQuery query) throws IOException, PagerDutyException {
         SimpleDateFormat sdf = new SimpleDateFormat(ISO8601_FORMAT);
         HttpGet get = new HttpGet(baseUrl + "/api/v1/incidents/count?since=" + sdf.format(start) + "&until=" + sdf.format(end) + "&" + query.queryParams());
-        System.out.println(get.getURI());
 
         HttpResponse response = client.execute(get);
         String s = EntityUtils.toString(response.getEntity());
@@ -65,7 +63,6 @@ public class PagerDutyClient {
     public List<Incident> getIncidents(Date start, Date end, IncidentsQuery query) throws IOException, PagerDutyException {
         SimpleDateFormat sdf = new SimpleDateFormat(ISO8601_FORMAT);
         HttpGet get = new HttpGet(baseUrl + "/api/v1/incidents?since=" + sdf.format(start) + "&until=" + sdf.format(end) + "&" + query.queryParams());
-        System.out.println(get.getURI());
 
         HttpResponse response = client.execute(get);
         String s = EntityUtils.toString(response.getEntity());
