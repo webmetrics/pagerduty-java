@@ -25,7 +25,7 @@ If you don't use Maven, you can still find the jars in the central Maven reposit
  - [JSR 330](http://code.google.com/p/atinject/) (aka javax.inject) for easy CI integration
 
 Using
-=====
+-----
 
 The API is pretty straight forward if you've read the PagerDuty API docs:
 
@@ -49,3 +49,8 @@ You can also wire up the PagerDutyClient using dependency injection frameworks s
  - @Named("pagerduty.subdomain")
  - @Named("pagerduty.username")
  - @Named("pagerduty.password")
+
+License
+-------
+
+This project is licensed under the [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.html) license.
