@@ -16,7 +16,7 @@ The easiest way to get started is to just add this dependency in to your Maven b
 <dependency>
     <groupId>biz.neustar</groupId>
     <artifactId>pagerduty</artifactId>
-    <version>1.0-beta-1</version>
+    <version>1.0-beta-2</version>
 </dependency>
 ```
 
