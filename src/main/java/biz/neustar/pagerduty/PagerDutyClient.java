@@ -16,6 +16,7 @@ import org.codehaus.jackson.map.SerializationConfig;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -59,19 +60,27 @@ public class PagerDutyClient {
      * @return the count of incidents
      * @throws IOException when there is an IO problem such as making a network request
      * @throws QueryException when PagerDuty rejects the query being made and responds with an error and reason
+     * @throws InternalException when PagerDuty returns a 5xx error code
      */
-    public int getIncidentsCount(Date start, Date end, IncidentsQuery query) throws IOException, QueryException {
+    public int getIncidentsCount(Date start, Date end, IncidentsQuery query) throws IOException, QueryException, InternalException {
         SimpleDateFormat sdf = new SimpleDateFormat(ISO8601_FORMAT);
         HttpGet get = new HttpGet(baseUrl + "/api/v1/incidents/count?since=" + sdf.format(start) + "&until=" + sdf.format(end) + "&" + query.queryParams());
 
         HttpResponse response = client.execute(get);
-        String s = EntityUtils.toString(response.getEntity());
-        if (s.startsWith("{\"error\":")) {
-            PagerDutyErrorWrapper wrapper = mapper.readValue(s, PagerDutyErrorWrapper.class);
-            throw new QueryException(wrapper.getError());
-        } else {
-            IncidentCount count = mapper.readValue(s, IncidentCount.class);
-            return count.getTotal();
+        try {
+            InputStream is = response.getEntity().getContent();
+            int sc = response.getStatusLine().getStatusCode();
+            if (sc >= 500) {
+                throw new InternalException(response);
+            } else if (sc >= 400) {
+                PagerDutyErrorWrapper wrapper = mapper.readValue(is, PagerDutyErrorWrapper.class);
+                throw new QueryException(wrapper.getError());
+            } else {
+                IncidentCount count = mapper.readValue(is, IncidentCount.class);
+                return count.getTotal();
+            }
+        } finally {
+            EntityUtils.consume(response.getEntity());
         }
     }
 
@@ -84,23 +93,27 @@ public class PagerDutyClient {
      * @return the count of incidents
      * @throws IOException when there is an IO problem such as making a network request
      * @throws QueryException when PagerDuty rejects the query being made and responds with an error and reason
+     * @throws InternalException when PagerDuty returns a 5xx error code
      */
     public List<Incident> getIncidents(Date start, Date end, IncidentsQuery query) throws IOException, QueryException, InternalException {
         SimpleDateFormat sdf = new SimpleDateFormat(ISO8601_FORMAT);
         HttpGet get = new HttpGet(baseUrl + "/api/v1/incidents?since=" + sdf.format(start) + "&until=" + sdf.format(end) + "&" + query.queryParams());
 
         HttpResponse response = client.execute(get);
-        if (response.getStatusLine().getStatusCode() >= 500) {
-            throw new InternalException(response);
-        }
-
-        String s = EntityUtils.toString(response.getEntity());
-        if (s.startsWith("{\"error\":")) {
-            PagerDutyErrorWrapper wrapper = mapper.readValue(s, PagerDutyErrorWrapper.class);
-            throw new QueryException(wrapper.getError());
-        } else {
-            IncidentResults results = mapper.readValue(s, IncidentResults.class);
-            return results.getIncidents();
+        try {
+            InputStream is = response.getEntity().getContent();
+            int sc = response.getStatusLine().getStatusCode();
+            if (sc >= 500) {
+                throw new InternalException(response);
+            } else if (sc >= 400) {
+                PagerDutyErrorWrapper wrapper = mapper.readValue(is, PagerDutyErrorWrapper.class);
+                throw new QueryException(wrapper.getError());
+            } else {
+                IncidentResults results = mapper.readValue(is, IncidentResults.class);
+                return results.getIncidents();
+            }
+        } finally {
+            EntityUtils.consume(response.getEntity());
         }
     }
 
@@ -163,14 +176,19 @@ public class PagerDutyClient {
         post.setEntity(new ByteArrayEntity(baos.getBytes()));
 
         HttpResponse response = client.execute(post);
-        int sc = response.getStatusLine().getStatusCode();
-        if (sc == 200) {
-            return mapper.readValue(response.getEntity().getContent(), EventResponse.class);
-        } else if (sc == 400) {
-            EventResponse resp = mapper.readValue(response.getEntity().getContent(), EventResponse.class);
-            throw new InvalidEventException(resp);
-        } else {
-            throw new InternalException(response);
+        try {
+            int sc = response.getStatusLine().getStatusCode();
+            InputStream is = response.getEntity().getContent();
+            if (sc == 200) {
+                return mapper.readValue(is, EventResponse.class);
+            } else if (sc == 400) {
+                EventResponse resp = mapper.readValue(is, EventResponse.class);
+                throw new InvalidEventException(resp);
+            } else {
+                throw new InternalException(response);
+            }
+        } finally {
+            EntityUtils.consume(response.getEntity());
         }
     }
 }
