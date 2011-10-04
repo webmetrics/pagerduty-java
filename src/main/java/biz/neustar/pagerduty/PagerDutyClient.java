@@ -3,7 +3,6 @@ package biz.neustar.pagerduty;
 import biz.neustar.pagerduty.model.*;
 import biz.neustar.pagerduty.util.LowerCaseWithUnderscoresStrategy;
 import biz.neustar.pagerduty.util.PagerDutyHttpClient;
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -15,6 +14,8 @@ import org.codehaus.jackson.map.SerializationConfig;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -171,9 +172,9 @@ public class PagerDutyClient {
     private EventResponse event(String type, String serviceKey, String description, String incidentKey, Object details) throws IOException, InternalException, InvalidEventException {
         HttpPost post = new HttpPost("https://events.pagerduty.com/generic/2010-04-15/create_event.json");
 
-        ByteOutputStream baos = new ByteOutputStream();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
         mapper.writeValue(baos, new Event(serviceKey, type, description, incidentKey, details));
-        post.setEntity(new ByteArrayEntity(baos.getBytes()));
+        post.setEntity(new ByteArrayEntity(baos.toByteArray()));
 
         HttpResponse response = client.execute(post);
         try {
